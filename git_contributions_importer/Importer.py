@@ -44,7 +44,7 @@ class Importer:
         self.ignored_file_types = []
 
         # In case the settings above are too crazy it doesn't commit too much (the array is to have a random value instead of a specific one)
-        self.max_commits_per_day = [10,15]
+        self.max_commits_per_day = [99999, 99999]
 
         # Ignore all the commits before this date, in order to analyze same repositories over time
         self.ignore_before_date = None
@@ -130,7 +130,7 @@ class Importer:
         for repo in self.repos:
             for b in repo.branches:
                 for c in repo.iter_commits(b.name):
-                    if c.committed_date < ignore_before_date or (self.ignore_before_date != None and c.committed_date < self.ignore_before_date): 
+                    if c.committed_date < ignore_before_date or (self.ignore_before_date != None and c.committed_date < self.ignore_before_date):
                         continue
                     if c.hexsha not in s:
                         s.add(c.hexsha)
