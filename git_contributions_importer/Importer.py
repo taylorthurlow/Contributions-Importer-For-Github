@@ -14,46 +14,57 @@ class Importer:
 
     def __init__(self, repos, mock_repo):
 
-        # Maximum amount in the past that the commit can be shifted for. The values are in seconds.
+        # Maximum amount in the past that the commit can be shifted for. The
+        # values are in seconds.
         self.commit_time_max_past = 0
 
-        # The maximum number of changes (line of code changed, added or removed) that a commit can have. Commits with
-        # many changes are disadvantaged in GitHub. Most likely these large commits could have been split in many
-        # smaller ones. GitHub users that know how contributions are calculated are prone to do several smaller commits
-        # instead, while in private repository this could not be necessary, especially in smaller teams.
-        # The default is -1, and it is to indicate no limits.
+        # The maximum number of changes (line of code changed, added or
+        # removed) that a commit can have. Commits with many changes are
+        # disadvantaged in GitHub. Most likely these large commits could have
+        # been split in many smaller ones. GitHub users that know how
+        # contributions are calculated are prone to do several smaller commits
+        # instead, while in private repository this could not be necessary,
+        # especially in smaller teams.  The default is -1, and it is to
+        # indicate no limits.
         self.commit_max_changes = -1
 
-        # Maximum number of changes per file. By default for each change (line of code changed, added or removed) a
-        # line of mock code is changed. This would limit the number of generated mock code for extreme cases where too
-        # many lines of codes are changes (e.g. SQL database dump).
+        # Maximum number of changes per file. By default for each change (line
+        # of code changed, added or removed) a line of mock code is changed.
+        # This would limit the number of generated mock code for extreme cases
+        # where too many lines of codes are changes (e.g. SQL database dump).
         self.max_changes_per_file = 100
 
-        # If commit_max_changes is a positive number, a commit could be break in several ones.
-        # In that case this value decides how long these commits could go in the past. The idea
-        # is that a big commit is likely composed by several features that could have been
-        # committed in different commits. These changes would have been some time before the actual
-        # big commit. The time is in seconds.
+        # If commit_max_changes is a positive number, a commit could be break
+        # in several ones.  In that case this value decides how long these
+        # commits could go in the past. The idea is that a big commit is likely
+        # composed by several features that could have been committed in
+        # different commits. These changes would have been some time before the
+        # actual big commit. The time is in seconds.
         self.changes_commits_max_time_backward = 60*60*24*4  # 4 days as default
 
-        # It allows the importer to collapse several lines of changes to just one per commit,
-        # and one per type of file. This allows avoiding excessive growth of files size.
+        # It allows the importer to collapse several lines of changes to just
+        # one per commit, and one per type of file. This allows avoiding
+        # excessive growth of files size.
         self.collapse_multiple_changes_to_one = True
 
-        # It allows some types of files to be ignored. For example ['.csv', '.txt', '.pdf', '.log', '.sql', '.json']
+        # It allows some types of files to be ignored. For example ['.csv',
+        # '.txt', '.pdf', '.log', '.sql', '.json']
         self.ignored_file_types = []
 
-        # In case the settings above are too crazy it doesn't commit too much (the array is to have a random value instead of a specific one)
+        # In case the settings above are too crazy it doesn't commit too much
+        # (the array is to have a random value instead of a specific one)
         self.max_commits_per_day = [99999, 99999]
 
-        # Ignore all the commits before this date, in order to analyze same repositories over time
+        # Ignore all the commits before this date, in order to analyze same
+        # repositories over time
         self.ignore_before_date = None
 
         # Ignore all the commits before last commit
         self.start_from_last = False
 
-        # Author to analyse. If None commits from any author will be imported. Author is given as email
-        # This could be an array of email in case, depending on the repository, the author has different emails.
+        # Author to analyse. If None commits from any author will be imported.
+        # Author is given as email This could be an array of email in case,
+        # depending on the repository, the author has different emails.
         self.author = None
 
         self.repos = repos
